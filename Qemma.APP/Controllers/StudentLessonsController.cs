@@ -63,11 +63,8 @@
                 var res = await _studentLessonFirestoreCollection.AddAsync(studentLesson);
                 
                 student.LessonIds.Add(res);
-                student.TotalDegree += lesson.QuizDegree + lesson.InClassExamDegree
-                    + lesson.HomeworkDegree + lesson.BehaviourDegree + lesson.InteractionDegree;
-
-                student.Degree += studentLesson.QuizDegree + studentLesson.InClassExamDegree 
-                    + studentLesson.HomeworkDegree + studentLesson.BehaviourDegree + studentLesson.InteractionDegree;
+                student.TotalDegree += lesson.QuizDegree;
+                student.Degree += studentLesson.QuizDegree;
                 await _studentFirestoreCollection.UpdateAsync(studentId, student);
 
                 lesson.StudentIds.Add(res);

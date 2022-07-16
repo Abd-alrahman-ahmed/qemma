@@ -260,3 +260,7 @@ input::-ms-clear {
 .card {
   border: 0;
 }
+
+.table-responsive {
+  font-weight: bolder;
+}

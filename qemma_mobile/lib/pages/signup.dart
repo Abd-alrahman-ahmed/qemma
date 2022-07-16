@@ -50,6 +50,7 @@ class SignupPage extends StatelessWidget {
                           Locales.t('student.register'),
                           //'تسجيل طالب إلى مسار التعليم',
                           style: const TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),

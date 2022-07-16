@@ -6,12 +6,15 @@
     {
         private readonly FirestoreDatabase<Lesson> _lessonFirestoreCollection;
         private readonly FirestoreDatabase<Group> _groupFirestoreCollection;
+        private readonly FirestoreDatabase<StudentLesson> _studentLessonFirestoreCollection;
 
         public LessonsController(FirestoreDatabase<Lesson> lessonFirestoreCollection,
-            FirestoreDatabase<Group> groupFirestoreCollection)
+            FirestoreDatabase<Group> groupFirestoreCollection,
+            FirestoreDatabase<StudentLesson> studentLessonFirestoreCollection)
         {
             _lessonFirestoreCollection = lessonFirestoreCollection;
             _groupFirestoreCollection = groupFirestoreCollection;
+            _studentLessonFirestoreCollection = studentLessonFirestoreCollection;
         }
 
         [HttpGet]
@@ -70,6 +73,16 @@
             try
             {
                 await _lessonFirestoreCollection.UpdateAsync(id, lesson);
+
+                var studentLessons = (await _studentLessonFirestoreCollection.GetByFilterAsync($"lessonId eq {id}"))?.Data ?? new List<StudentLesson>();
+                foreach (var studenLesson in studentLessons)
+                {
+                    studenLesson.Start = lesson.Start;
+                    studenLesson.QuizDegree = Math.Min(studenLesson.QuizDegree, lesson.QuizDegree);
+                    studenLesson.InClassExamDegree = Math.Min(studenLesson.InClassExamDegree, lesson.InClassExamDegree);
+                    await _studentLessonFirestoreCollection.UpdateAsync(studenLesson.Id, studenLesson);
+                }
+
                 return StatusCode(StatusCodes.Status202Accepted);
             }
             catch (Exception e)

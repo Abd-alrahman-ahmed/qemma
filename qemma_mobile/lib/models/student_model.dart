@@ -6,6 +6,7 @@ import 'package:qemma_mobile/models/year_enum.dart';
 
 class Student {
   String id;
+  String code;
   String name;
   String? phoneNumber;
   Gender gender;
@@ -19,6 +20,7 @@ class Student {
 
   Student({
     required this.id,
+    required this.code,
     required this.name,
     required this.phoneNumber,
     required this.gender,
@@ -34,6 +36,7 @@ class Student {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'code': code,
       'name': name,
       'phoneNumber': phoneNumber,
       'gender': gender.index,
@@ -50,6 +53,7 @@ class Student {
   factory Student.fromJson(Map<String, dynamic> data) {
     return Student(
       id: data['id'],
+      code: data['code'],
       name: data['name'],
       phoneNumber: data['phoneNumber'],
       gender: Gender.values[data['gender']],

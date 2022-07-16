@@ -21,10 +21,13 @@ class LandingPage extends StatelessWidget {
                 children: <BootstrapCol>[
                   BootstrapCol(
                     sizes: 'col',
-                    child: Center(
-                      child: Image(
-                        image: const AssetImage('assets/images/logo.png'),
-                        height: MediaQuery.of(context).size.height * 0.40,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Image(
+                          image: const AssetImage('assets/images/logo.png'),
+                          height: MediaQuery.of(context).size.height * 0.40,
+                        ),
                       ),
                     ),
                   ),

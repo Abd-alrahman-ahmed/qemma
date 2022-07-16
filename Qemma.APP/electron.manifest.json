@@ -11,7 +11,7 @@
     "appId": "com.qemma.app",
     "productName": "Al-Qemma",
     "copyright": "Copyright © 2022",
-    "buildVersion": "1.0.0",
+    "buildVersion": "1.0.0+1",
     "compression": "maximum",
     "directories": {
       "output": "../../../bin/Desktop"

@@ -142,6 +142,8 @@ export default {
         params: {
           pageNo: pageNo,
           pageSize: this.pageSize,
+          orderBy: "start",
+          orderDir: "DESC",
           queryFilter: filters
         }
       }).then(pageData => {

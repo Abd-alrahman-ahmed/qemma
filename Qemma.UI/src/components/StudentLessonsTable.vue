@@ -21,7 +21,7 @@
         </tr>
         <tr v-for="(studentLesson, index) in studentLessons" :key="'student-lesson-' + studentLesson.id">
           <td>{{studentDetails ? studentLesson.lesson.name : studentLesson.student.name}}</td>
-          <td v-if="studentDetails">{{$moment(studentLesson.date).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
+          <td v-if="studentDetails">{{$moment(studentLesson.start).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
           <td>{{$locales.t(`lookups.attend.${studentLesson.hasAttend ? '1' : '2'}`)}}</td>
           <td>{{studentLesson.quizDegree}}/{{studentLesson.lesson.quizDegree}}</td>
           <td>{{studentLesson.homeworkDegree}}/{{studentLesson.lesson.homeworkDegree}}</td>

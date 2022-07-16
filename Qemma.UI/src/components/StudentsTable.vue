@@ -18,12 +18,12 @@
           <td colspan="8"><empty-state /></td>
         </tr>
         <tr v-for="(student, index) in students" :key="'student-' + student.id">
-          <td>{{student.id}}</td>
+          <td>{{student.code}}</td>
           <td>{{$moment(student.regisrationDate).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
           <td>{{student.name}}</td>
           <td>{{$locales.t(`lookups.gender.${student.gender}`)}}</td>
           <td>{{$locales.t(`lookups.year.${student.year}`)}}</td>
-          <td>{{student.totalDegree == 0 ? '--' : student.degree / student.totalDegree * 100 + '%'}}</td>
+          <td>{{student.totalDegree == 0 ? '--' : Math.round(student.degree / student.totalDegree * 1000) / 10 + '%'}}</td>
           <td data-toggle="tooltip" data-placement="bottom" :title="$locales.t(`lookups.status.${student.status}`)">
             <font-awesome-icon :icon="getStatusIcon(student)" :class="getStatusColor(student)" />
           </td>

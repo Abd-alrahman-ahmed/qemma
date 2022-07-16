@@ -4,6 +4,7 @@ import 'dart:io';
 
 class FireStore {
   static Future<bool> checkNetwork() async {
+    return true;
     try {
       final result = await InternetAddress.lookup('www.google.com');
       if (result.isEmpty || result.first.rawAddress.isEmpty) {
@@ -122,4 +123,5 @@ class FirestoreCollections {
   static const String studentLesson = "student_lessons";
   static const String event = "qemma_events";
   static const String locales = "locales";
+  static const String degrees = "degrees_range";
 }

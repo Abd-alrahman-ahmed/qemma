@@ -74,7 +74,7 @@ export default {
       if (!init) this.$emit('changePage', page);
     },
     WindowHandelResize(){
-      var width = $(window).width();
+      let width = $(window).width();
       if(width >= 1200)
         this.maxSize = parseInt(1140 / 50);
       if(width < 1200 && width >= 992)

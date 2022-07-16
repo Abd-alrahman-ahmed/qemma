@@ -77,7 +77,7 @@ export default {
   name: 'SaveStudentModal',
   data: () => ({
     model: {
-      id: '', name: '', gender: 0, year: 0, 
+      id: '', name: '', gender: 0, year: 0, code: '',
       status: 0, phoneNumber: '', degree: 0, totalDegree: 0
     },
     isEdit: false,
@@ -102,7 +102,7 @@ export default {
   created() {
     this.$bus.$on("init-save-student-modal", (student=null, id=0) =>   {
       this.model = Object.assign({}, {
-        id: '', name: '', gender: 0, year: 0, 
+        id: '', name: '', gender: 0, year: 0, code: '',
         status: 0, phoneNumber: '', degree: 0, totalDegree: 0
       });
       if (student != null) {
@@ -137,7 +137,8 @@ export default {
         data: this.model
       }).then(data => {
         if (!this.isEdit) {
-          this.model.id = data;
+          this.model.id = data.id;
+          this.model.code = data.code;
           this.model.status = 2; // confirmed
         };
         this.$refs.form.resetValidation();

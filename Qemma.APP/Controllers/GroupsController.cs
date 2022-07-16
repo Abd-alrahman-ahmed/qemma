@@ -72,35 +72,5 @@
                 return BadRequest(e);
             }
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
-        {
-            try
-            {
-                var lessonsPage = await _lessonFirestoreCollection.GetByFilterAsync($"GroupId eq {id}");
-                var studentsPage = await _studentFirestoreCollection.GetByFilterAsync();
-                var lessonIds = lessonsPage.Data.Select(l => l.Id);
-
-                foreach (var student in studentsPage.Data)
-                {
-                    student.LessonIds = student.LessonIds.Where(l => !lessonIds.Contains(l)).ToList();
-                    student.GroupIds = student.GroupIds.Where(groupId => groupId != id).ToList();
-                    await _studentFirestoreCollection.UpdateAsync(id, student);
-                }
-
-                foreach (var lessonId in lessonIds)
-                {
-                    await _lessonFirestoreCollection.DeleteAsync(lessonId ?? "");
-                }
-
-                await _groupFirestoreCollection.DeleteAsync(id);
-                return StatusCode(StatusCodes.Status202Accepted);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
     }
 }

@@ -58,7 +58,7 @@
                 to ??= DateTime.UtcNow;
 
                 var studentLessons = (await _studentLessonFirestoreCollection.GetByFilterAsync($"studentId eq {id}", orderBy: "start"))?.Data ?? new List<StudentLesson>();
-                var _ = studentLessons
+                var chartPoints = studentLessons
                     .Where(l => l.Start >= from && l.Start <= to)
                     .Select(l =>
                     {
@@ -75,7 +75,7 @@
                         return new ChartPoint<DateTime, double>
                         {
                             Key = l.Key,
-                            Value = total == 0 ? 0 : degrees / total
+                            Value = total == 0 ? 0 : Math.Round(degrees / total * 100, 1)
                         };
                     })
                     .ToList();
@@ -83,8 +83,8 @@
                 return Ok(new Chart<DateTime, double>
                 {
                     Name = "Student-Degrees",
-                    Categories = _.Select(l => l.Key).ToArray(),
-                    Data = _.Select(l => l.Value).ToArray()
+                    Categories = chartPoints.Select(l => l.Key).ToArray(),
+                    Data = chartPoints.Select(l => l.Value).ToArray()
                 });
             }
             catch (Exception e)
@@ -100,7 +100,8 @@
             {
                 student.RegistrationDate = DateTime.UtcNow;
                 student.Status = AccountStatus.Confirmed;
-                
+                student.Code = long.Parse(student.RegistrationDate.ToString("yyMMddHHmmss")).ToString("X");
+
                 var group = (await _groupFirestoreCollection.GetByFilterAsync($"year eq {(int)student.Year}"))?.Data?.FirstOrDefault();
                 if (group is null) return NoContent();
 
@@ -110,7 +111,11 @@
                 if (group.StudentIds is null) group.StudentIds = new List<string>();
                 group.StudentIds.Add(res);
                 await _groupFirestoreCollection.UpdateAsync(group.Id, group);
-                return StatusCode(StatusCodes.Status201Created, res);
+                return StatusCode(StatusCodes.Status201Created, new
+                {
+                    id = res,
+                    code = student.Code
+                });
             }
             catch (Exception e)
             {
@@ -161,84 +166,6 @@
                         if (removed) await _groupFirestoreCollection.UpdateAsync(oldGroup.Id, oldGroup);
                     }
                 }
-                return StatusCode(StatusCodes.Status202Accepted);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
-        {
-            try
-            {
-                var lessons = await _studentLessonFirestoreCollection.GetByFilterAsync($"StudentId eq {id}");
-                if (lessons.Data.Any()) return BadRequest("Can't delete this student");
-
-                var groupsPage = await _groupFirestoreCollection.GetByFilterAsync();
-                foreach (var group in groupsPage.Data)
-                {
-                    group.StudentIds = group.StudentIds.Where(studentId => studentId != id).ToList();
-                    await _groupFirestoreCollection.UpdateAsync(group.Id, group);
-                }
-
-                await _studentFirestoreCollection.DeleteAsync(id);
-                return StatusCode(StatusCodes.Status202Accepted);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [HttpPut("{id}/groups/{groupId}/attach")]
-        public async Task<IActionResult> AddStudentToGroup([FromRoute] string id, [FromRoute] string groupId)
-        {
-            try
-            {
-                var group = await _groupFirestoreCollection.GetByKeyAsync(groupId);
-                var student = await _studentFirestoreCollection.GetByKeyAsync(id);
-                if (student is null || group is null) return NoContent();
-
-                if (student.GroupIds is null) student.GroupIds = new List<string>();
-                if (group.StudentIds is null) group.StudentIds = new List<string>();
-
-                student.GroupIds.Add(groupId);
-                await _studentFirestoreCollection.UpdateAsync(id, student);
-
-                group.StudentIds.Add(id);
-                await _groupFirestoreCollection.UpdateAsync(groupId, group);
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [HttpDelete("{id}/groups/{groupId}/detach")]
-        public async Task<IActionResult> RemoveStudentFromGroup([FromRoute] string id, [FromRoute] string groupId)
-        {
-            try
-            {
-                var lessons = await _studentLessonFirestoreCollection.GetByFilterAsync($"GroupId eq {groupId};f--and--f;StudentId eq {id}");
-                if (lessons.Data.Any()) return BadRequest("Can't detach student from this group");
-
-                var group = await _groupFirestoreCollection.GetByKeyAsync(groupId);
-                var student = await _studentFirestoreCollection.GetByKeyAsync(id);
-
-                if (student is null || group is null) return NoContent();
-
-                if (student.GroupIds is null) student.GroupIds = new List<string>();
-                if (group.StudentIds is null) group.StudentIds = new List<string>();
-
-                student.GroupIds = student.GroupIds.Where(sGroupId => sGroupId != groupId).ToList();
-                await _studentFirestoreCollection.UpdateAsync(id, student);
-
-                group.StudentIds = group.StudentIds.Where(studentId => studentId != id).ToList();
-                await _groupFirestoreCollection.UpdateAsync(groupId, group);
                 return StatusCode(StatusCodes.Status202Accepted);
             }
             catch (Exception e)

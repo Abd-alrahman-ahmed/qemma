@@ -153,7 +153,7 @@ class SigninPage extends StatelessWidget {
         Navigator.pushReplacementNamed(context, "/blocked");
       } else if (result.status == ActionStatus.pending) {
         Navigator.pushReplacementNamed(context, "/pending",
-            arguments: Arguments(result.data!.id, false));
+            arguments: Arguments(result.data!.code, false));
       } else if (result.status == ActionStatus.ok) {
         Navigator.pushReplacementNamed(context, "/home");
       }

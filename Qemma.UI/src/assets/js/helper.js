@@ -96,14 +96,6 @@ export class HttpService {
     
     config.headers['Content-Type'] = config.contentType;
 
-    // set Authrization in header
-    let factory = sessionStorage.getItem(Vue.prototype.$helper.factoryKey);
-    if (factory != null) {
-      factory = JSON.parse(factory);
-      config.headers['X-FactoryId'] = factory.id;
-      config.headers['X-FactoryCatalog'] = factory.catalogName;
-    }
-
     return config;
   }
 }

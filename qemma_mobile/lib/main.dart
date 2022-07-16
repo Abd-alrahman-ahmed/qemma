@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
@@ -20,7 +20,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await StudentPresenter.initStudent();
-  var locale = await Locales.init(Platform.localeName.split('_')[0]);
+  var locale = await Locales.init(window.locale.languageCode);
   await Jiffy.locale(locale?.code ?? 'ar');
   runApp(Application(
       networkStatus: locale != null, isLogged: StudentPresenter.isLogged()));

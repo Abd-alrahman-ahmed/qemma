@@ -98,32 +98,46 @@ class LessonsTable extends StatelessWidget {
                             ),
                           ),
                           DataCell(
-                            Text(Locales.t(
-                                "lookups.attend.${l.hasAttend ? '1' : '2'}")),
+                            Text(
+                              Locales.t(
+                                  "lookups.attend.${l.hasAttend ? '1' : '2'}"),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           DataCell(
                             Text(
                               "${l.quizDegree.toString()}/${l.lesson?.quizDegree.toString()}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           DataCell(
                             Text(
                               "${l.homeworkDegree.toString()}/${l.lesson?.homeworkDegree.toString()}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           DataCell(
                             Text(
                               "${l.inClassExamDegree.toString()}/${l.lesson?.inClassExamDegree.toString()}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           DataCell(
                             Text(
                               "${l.behaviourDegree.toString()}/${l.lesson?.behaviourDegree.toString()}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           DataCell(
                             Text(
                               "${l.interactionDegree.toString()}/${l.lesson?.interactionDegree.toString()}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           DataCell(

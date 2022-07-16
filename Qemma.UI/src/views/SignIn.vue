@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-content-center">
-      <img class="my-4" src="@/assets/logo.png" alt="accounting logo" width="124" height="124">
+      <img class="my-4" src="@/assets/logo.png" alt="accounting logo" width="256" height="256">
     </div>
     <base-form :model="model" ref="form" class="form-signin">
       <div class="form-group">

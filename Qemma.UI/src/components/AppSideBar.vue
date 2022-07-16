@@ -41,12 +41,12 @@ export default {
   }),
   methods: {
     toggleCollapsable(id) {
-      var element = document.getElementById(id);
+      let element = document.getElementById(id);
       if (this.lastCollapsableEle == id) {
         $(element).collapse('toggle');
       } else {
         if (this.lastCollapsableEle != '') {
-          var oldElement = document.getElementById(this.lastCollapsableEle);
+          let oldElement = document.getElementById(this.lastCollapsableEle);
           $(oldElement).collapse('hide');
         }
         $(element).collapse('show');

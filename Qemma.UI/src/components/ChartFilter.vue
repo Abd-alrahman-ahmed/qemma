@@ -46,7 +46,7 @@ export default {
   data: () => ({
     from: '',
     to: '',
-    operation: 1
+    operation: 2
   }),
   computed: {
     filterId() {

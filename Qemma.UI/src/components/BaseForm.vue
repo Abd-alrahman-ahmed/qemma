@@ -53,7 +53,7 @@ export default {
         let rule = $(input).attr('data-validation-rule');
         let id = prop;
         let validator = eval(rule);
-        var result = validator(this.getter(prop));
+        let result = validator(this.getter(prop));
         if (typeof(result) != "string") {
           this.errors.removeIf(e => e.id == id);
           continue;

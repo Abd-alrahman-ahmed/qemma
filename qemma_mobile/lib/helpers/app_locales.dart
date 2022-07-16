@@ -1,20 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:qemma_mobile/helpers/app_firestore.dart';
+import 'package:qemma_mobile/models/app_degree_model.dart';
 import 'package:qemma_mobile/models/app_locale_model.dart';
 import 'package:qemma_mobile/models/field_filter_model.dart';
 
 class Locales {
   static AppLocale _current = AppLocale(code: 'ar', rtl: true, supported: true);
   static List<AppLocale> _locales = List.empty();
+  static List<AppDegree> _degrees = List.empty();
 
   static Future<AppLocale?> init(String localeCode) async {
     var locales = await FireStore.getAllFiltered(
-        FirestoreCollections.locales, (data) => AppLocale.fromJson(data), [
-      FieldFilter('supported', isEqualTo: true),
-    ]);
+      FirestoreCollections.locales,
+      (data) => AppLocale.fromJson(data),
+      [
+        FieldFilter('supported', isEqualTo: true),
+      ],
+    );
+    var degree = await FireStore.getAllFiltered(
+      FirestoreCollections.degrees,
+      (data) => AppDegree.fromJson(data),
+      [],
+    );
 
-    if (locales == null) return null;
+    if (locales == null || degree == null) return null;
     _locales = locales;
+    _degrees = degree;
+    _degrees.sort((a, b) => b.min.compareTo(a.min));
 
     if (_locales.isNotEmpty) {
       _current = _locales.firstWhere(
@@ -54,21 +66,12 @@ class Locales {
           id: index + 1, value: _translate("lookups.status.${(index + 1)}")));
 
   static String studentDegree(double degree) {
-    var translateKey = "lookups.degree.";
-    if (degree >= 85) {
-      translateKey += "1";
-    } else if (degree >= 75) {
-      translateKey += "2";
-    } else if (degree >= 60) {
-      translateKey += "3";
-    } else if (degree >= 50) {
-      translateKey += "4";
-    } else if (degree < 50) {
-      translateKey += "5";
-    } else {
-      translateKey += "6";
+    for (var degreeRange in _degrees) {
+      if (degree >= degreeRange.min) {
+        return _translate(degreeRange.translationKey);
+      }
     }
-    return _translate(translateKey);
+    return _translate("lookups.degree.nodegree");
   }
 
   static List<LocaleResult> chartGroupingOptions() {

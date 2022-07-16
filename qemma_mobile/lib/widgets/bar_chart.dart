@@ -102,9 +102,9 @@ class BarChartWidget extends StatelessWidget {
         touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: Colors.blueGrey,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              String weekDay = points.firstWhere((p) => p.id == group.x).key;
+              String xlable = points.firstWhere((p) => p.id == group.x).key;
               return BarTooltipItem(
-                '$weekDay\n',
+                '$xlable\n',
                 const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

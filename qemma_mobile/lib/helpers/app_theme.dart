@@ -61,7 +61,7 @@ class AppTheme {
         ),
       ),
     ),
-    fontFamily: 'Roboto',
+    fontFamily: 'Droid Arabic Kufi',
     textTheme: const TextTheme(
       button: TextStyle(
         color: Colors.black,

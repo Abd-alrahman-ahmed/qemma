@@ -6,20 +6,29 @@
     {
         private readonly IConfiguration _configuration;
         private readonly FirestoreDatabase<AppLocale> _localeFirestoreCollection;
+        private readonly FirestoreDatabase<AppDegree> _degreeFirestoreCollection;
 
-        public SystemController(IConfiguration configuration, FirestoreDatabase<AppLocale> localeFirestoreCollection)
+        public SystemController(IConfiguration configuration, 
+            FirestoreDatabase<AppLocale> localeFirestoreCollection, 
+            FirestoreDatabase<AppDegree> degreeFirestoreCollection)
         {
             _configuration = configuration;
             _localeFirestoreCollection = localeFirestoreCollection;
+            _degreeFirestoreCollection = degreeFirestoreCollection;
         }
 
-        [HttpGet("locales")]
+        [HttpGet("init")]
         public async Task<IActionResult> GetLocales()
         {
             try
             {
                 var locales = (await _localeFirestoreCollection.GetByFilterAsync())?.Data ?? new List<AppLocale>();
-                return StatusCode(StatusCodes.Status200OK, locales);
+                var degrees = (await _degreeFirestoreCollection.GetByFilterAsync())?.Data ?? new List<AppDegree>();
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    locales,
+                    degrees
+                });
             }
             catch (Exception e)
             {

@@ -53,7 +53,7 @@ if (process.env.NODE_ENV === 'development'){
 }
 
 Array.prototype.removeIf = function(callback) {
-  var i = this.length;
+  let i = this.length;
   while (i--) {
       if (callback(this[i], i)) {
           this.splice(i, 1);
@@ -61,21 +61,21 @@ Array.prototype.removeIf = function(callback) {
   }
 };
 
-var loading = new Vue({
+let loading = new Vue({
   router,
   render: h => h(LoadingSpainner),
 }).$mount('#loader');
 
 Vue.prototype.$http.send({
-  url: `${Vue.prototype.$BACKEND_APP_URL}/system/locales`
+  url: `${Vue.prototype.$BACKEND_APP_URL}/system/init`
 }).then(data => {
   Vue.prototype.$locales.init(data);
-  createApp();
+  createApp(loading);
 }).catch(_ => {
-  createApp();
+  createApp(loading);
 });
 
-function createApp() {
+function createApp(loading) {
   // destroy the vue listeners, etc
   loading.$destroy();
 

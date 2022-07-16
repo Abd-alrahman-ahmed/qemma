@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bootstrap/flutter_bootstrap.dart';
-import 'package:qemma_mobile/helpers/app_locales.dart';
 
 class NoNetworkPage extends StatelessWidget {
   const NoNetworkPage({Key? key}) : super(key: key);
@@ -8,7 +7,7 @@ class NoNetworkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: Locales.getDirection(),
+      textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -56,6 +55,7 @@ class NoNetworkPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),

@@ -14,11 +14,11 @@
             <div class="col-4">
               <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.name')">{{student.name}}</h5>
               <h6 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.year')">{{$locales.t(`lookups.year.${student.year}`)}}</h6>
-              <p class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.code')">{{student.id}}</p>  
+              <p class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.code')">{{student.code}}</p>  
             </div>
             <div class="col-4 card-delimiter">
-              <h3 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{studentDegree}}</h3>
-              <h3 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{student.totalDegree == 0 ? '--' : student.degree / student.totalDegree * 100 + '%'}}</h3>
+              <h3 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{studentDegreeText}}</h3>
+              <h3 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{student.totalDegree == 0 ? '--' : studentDegree + '%'}}</h3>
             </div>
             <div class="col-4">
               <a href="Javascript:void(0);" @click="saveStudent">
@@ -86,22 +86,43 @@ export default {
             show: false
           }
         },
+        plotOptions: {
+          bar: {
+            columnWidth: '20%',
+            distributed: true,
+          }
+        },
+        legend: {
+          show: false
+        },
         xaxis: {
           categories: this.categories
+        },
+        yaxis: {
+          min: 0,
+          max: 100,
+          tickAmount: 10
+        },
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val + '%'
+            },
+            title: {
+              formatter: function (seriesName) {
+                return ""
+              }
+            }
+          },
         }
       }
     },
     studentDegree() {
-      var translateKey = "lookups.degree.";
-      var degree = this.student.degree / this.student.degree * 100;
-      if (degree >= 85) translateKey += "1";
-      else if (degree >= 75) translateKey += "2";
-      else if (degree >= 60) translateKey += "3";
-      else if (degree >= 50) translateKey += "4";
-      else if (degree < 50) translateKey += "5"
-      else translateKey += "6"
-
-      return this.$locales.t(translateKey);
+      let degree = this.student.degree / this.student.totalDegree * 100;
+      return Math.round(degree * 10) / 10;
+    },
+    studentDegreeText() {
+      return this.$locales.getStudentDegree(this.studentDegree);
     },
     lessonFilterProps() { 
       return this.$locales.getLessonsFilterProps();
@@ -147,6 +168,8 @@ export default {
         params: {
           pageNo: pageNo,
           pageSize: this.pageSize,
+          orderBy: "start",
+          orderDir: "DESC",
           queryFilter: filters
         }
       }).then(pageData => {
@@ -176,6 +199,14 @@ export default {
           name: series.name,
           data: series.data
         }];
+        let localeCode = this.$locales.getCurrentLocaleCode();
+        for (let i = 0; i < series.categories.length; i++){
+          if (operation == 1) { // daily
+            series.categories[i] = this.$moment(series.categories[i]).local().locale(localeCode).format('MMMM Do dddd YYYY');
+          } else { // monthly
+            series.categories[i] = this.$moment(series.categories[i]).local().locale(localeCode).format('MMMM YYYY');
+          }
+        }
         this.categories = series.categories;
       });
     },

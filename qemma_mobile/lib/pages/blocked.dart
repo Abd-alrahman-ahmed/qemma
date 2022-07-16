@@ -70,6 +70,7 @@ class BlockedPage extends StatelessWidget {
                       child: Center(
                         child: Text(
                           Locales.t('app.blocked.msg'),
+                          textAlign: TextAlign.center,
                           //'يمكنك المتابعة مع السنتر لمعرفة السبب او لإلغاء الحظر',
                         ),
                       ),

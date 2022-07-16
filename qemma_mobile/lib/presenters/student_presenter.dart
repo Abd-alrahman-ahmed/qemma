@@ -23,6 +23,7 @@ class StudentPresenter {
   final LessonPresenter _lessonPresenter = LessonPresenter();
   static Student student = Student(
     id: "",
+    code: "",
     name: "",
     phoneNumber: "",
     gender: Gender.blank,
@@ -38,7 +39,9 @@ class StudentPresenter {
   static Future initStudent() async {
     try {
       var studentId = await SharedPreference.getData(
-          key: SharedPreferenceKeys.user_data, mapper: (d) => d);
+        key: SharedPreferenceKeys.user_data,
+        mapper: (d) => d,
+      );
       if (studentId != null) {
         student.id = studentId;
       }
@@ -52,7 +55,7 @@ class StudentPresenter {
   }
 
   void setId(String value) {
-    student.id = value;
+    student.code = value;
   }
 
   void setName(String value) {
@@ -71,10 +74,18 @@ class StudentPresenter {
     student.year = Year.values[value ?? 0];
   }
 
-  Future<Student?> getStudent() async => FireStore.get<Student>(
+  Future<Student?> getStudentById() async => FireStore.get(
         FirestoreCollections.students,
         student.id,
         (s) => Student.fromJson(s),
+      );
+
+  Future<List<Student>?> getStudentByCode() async => FireStore.getAllFiltered(
+        FirestoreCollections.students,
+        (s) => Student.fromJson(s),
+        [
+          FieldFilter("code", isEqualTo: student.code.toUpperCase()),
+        ],
       );
 
   Future<String?> addStudent() async => FireStore.add(
@@ -83,25 +94,31 @@ class StudentPresenter {
       );
 
   Future<ActionResult<Student>> signin() async {
-    var localStudent = await getStudent();
-    if (localStudent == null) {
+    var localStudent = await getStudentByCode();
+    if (localStudent == null || localStudent.isEmpty) {
       return ActionResult(
         status: ActionStatus.error,
         isSucceeded: false,
       );
     }
-    student = localStudent;
-    if (localStudent.status == AccountStatus.confirmed) {
+    if (localStudent.length > 1) {
+      return ActionResult(
+        status: ActionStatus.error,
+        isSucceeded: false,
+      );
+    }
+    student = localStudent.first;
+    if (student.status == AccountStatus.confirmed) {
       await SharedPreference.setString(
         key: SharedPreferenceKeys.user_data,
-        value: localStudent.id,
+        value: student.id,
       );
     }
     return ActionResult(
       data: student,
-      status: localStudent.status == AccountStatus.blocked
+      status: student.status == AccountStatus.blocked
           ? ActionStatus.blocked
-          : (localStudent.status == AccountStatus.pending
+          : (student.status == AccountStatus.pending
               ? ActionStatus.pending
               : ActionStatus.ok),
       isSucceeded: true,
@@ -124,6 +141,10 @@ class StudentPresenter {
 
     var group = groups.first;
     student.groupIds = [group.id];
+    student.code =
+        int.parse(Jiffy(student.registrationDate).format("yyMMddHHmmss"))
+            .toRadixString(16)
+            .toUpperCase();
     var studentId = await addStudent();
     if (studentId == null) {
       return ActionResult(
@@ -138,7 +159,7 @@ class StudentPresenter {
     var update = await _groupPresenter.updateGroup(group);
     if (update) {
       return ActionResult(
-        data: studentId,
+        data: student.code,
         status: ActionStatus.ok,
         isSucceeded: true,
       );
@@ -151,12 +172,12 @@ class StudentPresenter {
     }
   }
 
-  Future<ActionResult<bool>> load(
+  Future<ActionResult<bool>> loadStudentData(
     DateTime from,
     DateTime to,
     ChartAggregator aggregator,
   ) async {
-    var localeStudent = await getStudent();
+    var localeStudent = await getStudentById();
     if (localeStudent == null) {
       return ActionResult(isSucceeded: false);
     }
@@ -188,26 +209,10 @@ class StudentPresenter {
         .groupBy((l) => convertDate(l.start, aggregator))
         .entries
         .map((kv) {
-      var studentDegree = kv.value.fold<double>(
-        0.0,
-        (sum, item) =>
-            sum +
-            (item.quizDegree ?? 0.0) +
-            (item.inClassExamDegree ?? 0.0) +
-            (item.homeworkDegree ?? 0.0) +
-            (item.behaviourDegree ?? 0.0) +
-            (item.interactionDegree ?? 0.0),
-      );
+      var studentDegree = kv.value
+          .fold<double>(0.0, (sum, item) => sum + (item.quizDegree ?? 0.0));
       var totalDegree = kv.value.fold<double>(
-        0.0,
-        (sum, item) =>
-            sum +
-            (item.lesson?.quizDegree ?? 0.0) +
-            (item.lesson?.inClassExamDegree ?? 0.0) +
-            (item.lesson?.homeworkDegree ?? 0.0) +
-            (item.lesson?.behaviourDegree ?? 0.0) +
-            (item.lesson?.interactionDegree ?? 0.0),
-      );
+          0.0, (sum, item) => sum + (item.lesson?.quizDegree ?? 0.0));
       var finalDegree =
           totalDegree == 0 ? 0 : (studentDegree / totalDegree) * 100;
       return ChartPoint(

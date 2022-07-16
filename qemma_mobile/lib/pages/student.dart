@@ -31,7 +31,8 @@ class StudentPageState extends State<StudentPage> {
   void load() {
     ProgressDialog.show(
       context: context,
-      method: () => _studentPresenter.load(from, to, aggregator).then(
+      method: () =>
+          _studentPresenter.loadStudentData(from, to, aggregator).then(
         (value) {
           if (!mounted) return;
           setState(() {

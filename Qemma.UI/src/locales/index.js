@@ -1,11 +1,18 @@
 import Vue from 'vue'
 
-var locales = {
+let locales = {
   current: {rtl: true},
   _locales: [],
+  _degrees: [],
 
-  init: function(locales) {
-    this._locales = locales;
+  init: function(data) {
+    this._locales = data.locales;
+    this._degrees = data.degrees;
+    this._degrees.sort((a, b) => {
+      if (a.min > b.min) return -1;
+      if (b.min > a.min) return 1;
+      if (a.min == b.min) return 0;
+    });
     Vue.prototype.$bus.$emit("locales-loaded");
   },
 
@@ -85,8 +92,8 @@ var locales = {
 
   chartGroupingOptions() {
     return [
-      { name: this.translate('filter.monthly'), id: 1 },
-      { name: this.translate('filter.daily'), id: 2 }
+      { name: this.translate('filter.daily'), id: 1 },
+      { name: this.translate('filter.monthly'), id: 2 },
     ]
   },
 
@@ -95,6 +102,14 @@ var locales = {
       { name: this.translate('lookups.attend.1'), state: true},
       { name: this.translate('lookups.attend.2'), state: false}
     ]
+  },
+
+  getStudentDegree(degree) {
+    for (let i = 0; i < this._degrees.length; i++) {
+      if (degree >= this._degrees[i].min)
+        return this.translate(this._degrees[i].translationKey);
+    }
+    return this.translate("lookups.degree.nodegree")
   }
 }
 

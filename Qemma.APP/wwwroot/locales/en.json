@@ -173,8 +173,9 @@
     "lookups.degree.2": "Very good",
     "lookups.degree.3": "Good",
     "lookups.degree.4": "Acceptable",
-    "lookups.degree.5": "low",
-    "lookups.degree.6": "No degree",
+    "lookups.degree.5": "Low",
+    "lookups.degree.6": "Very low",
+    "lookups.degree.nodegree": "No degree",
 
     "dialogs.btn.ok": "OK",
     "dialogs.btn.cancel": "CANCEL",
