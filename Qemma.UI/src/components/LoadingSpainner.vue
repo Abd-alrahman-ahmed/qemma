@@ -3,7 +3,7 @@
     <div v-if="loading" class="text-center main-overlay">
       <div class="position-fixed-center">
         <div class="spinner-border text-primary" />
-        <h2 class="mt-4 text-white">{{$locales.t('app.loading')}}</h2>
+        <h2 class="mt-4 text-white">{{$locales.t('loading')}}</h2>
       </div>
     </div>
   </div>

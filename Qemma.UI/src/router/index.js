@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Students from '../views/Students.vue'
 
 Vue.use(VueRouter)
 
@@ -8,22 +8,22 @@ const routes = [
   {
     path: '/',
     name: 'main',
-    component: Home
+    component: Students
   },
   {
     path: '/home',
     name: 'home',
-    component: Home
-  },
-  {
-    path: '/signin',
-    name: 'sign-in',
-    component: () => import('../views/SignIn.vue')
+    component: Students
   },
   {
     path: '/students',
     name: 'students',
-    component: () => import('../views/Students.vue')
+    component: Students
+  },
+  {
+    path: '/students/pending',
+    name: 'students-pending',
+    component: () => import('../views/PendingStudents.vue')
   },
   {
     path: '/students/:id',
@@ -49,6 +49,11 @@ const routes = [
     path: '/events',
     name: 'events',
     component: () => import('../views/NotCompletedView.vue')
+  },
+  {
+    path: '/signin',
+    name: 'sign-in',
+    component: () => import('../views/SignIn.vue')
   },
   {
     path: '/500',

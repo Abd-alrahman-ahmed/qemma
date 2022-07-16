@@ -5,24 +5,24 @@
         <div class="col-12">
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.groups.year")}}</label>
+              <label class="control-label">{{$locales.t("group.year")}}</label>
               <v-select disabled :dir="$locales.direction()" :clearable="false" :options="years" :reduce="year => year.id" label="name" 
-                v-model="model.year" :placeholder="$locales.t('forms.groups.year.ph')" required>
+                v-model="model.year" :placeholder="$locales.t('group.year.ph')" required>
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="year" 
-                data-validation-rule="v => v != '' || 'forms.groups.year.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'group.year.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.groups.price")}}</label>
+              <label class="control-label">{{$locales.t("group.price")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.price" 
-                :placeholder="$locales.t('forms.groups.price.ph')" />
+                :placeholder="$locales.t('group.price.ph')" />
               <span data-validation-prop="price" 
-                data-validation-rule="v => v >= 0 || 'forms.groups.price.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'group.price.invalid'" class="invalid-feedback" />
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@ export default {
   }),
   computed: {
     title() {
-      let option = !this.isEdit ? "app.options.add" : "app.options.edit";
+      let option = !this.isEdit ? "options.add" : "options.edit";
       return this.$locales.t(option);
     },
     years() {

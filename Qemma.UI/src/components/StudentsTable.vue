@@ -1,16 +1,16 @@
 <template>
   <div class="table-responsive">
-    <table class="table mt-4">
+    <table class="table mt-4 sortable">
       <thead>
         <tr>
-          <th>{{$locales.t('tbls.students.cols.code')}}</th>
-          <th>{{$locales.t('tbls.students.cols.registrationdate')}}</th>
-          <th>{{$locales.t('tbls.students.cols.name')}}</th>
-          <th>{{$locales.t('tbls.students.cols.gender')}}</th>
-          <th>{{$locales.t('tbls.students.cols.year')}}</th>
-          <th>{{$locales.t('tbls.students.cols.degree')}}</th>
-          <th>{{$locales.t('tbls.students.cols.status')}}</th>
-          <th ></th>
+          <th>{{$locales.t('student.code')}}</th>
+          <th>{{$locales.t('student.registrationdate')}}</th>
+          <th>{{$locales.t('student.name')}}</th>
+          <th>{{$locales.t('student.gender')}}</th>
+          <th>{{$locales.t('student.year')}}</th>
+          <th>{{$locales.t('student.degree')}}</th>
+          <th>{{$locales.t('student.status')}}</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -19,17 +19,17 @@
         </tr>
         <tr v-for="(student, index) in students" :key="'student-' + student.id">
           <td>{{student.id}}</td>
-          <td>{{$moment(student.regisrationDate).local().locale($locales.current).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
+          <td>{{$moment(student.regisrationDate).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
           <td>{{student.name}}</td>
           <td>{{$locales.t(`lookups.gender.${student.gender}`)}}</td>
           <td>{{$locales.t(`lookups.year.${student.year}`)}}</td>
-          <td>{{student.degree / student.degree * 100}}%</td>
+          <td>{{student.totalDegree == 0 ? '--' : student.degree / student.totalDegree * 100 + '%'}}</td>
           <td data-toggle="tooltip" data-placement="bottom" :title="$locales.t(`lookups.status.${student.status}`)">
             <font-awesome-icon :icon="getStatusIcon(student)" :class="getStatusColor(student)" />
           </td>
           <td>
-            <router-link :to="`/students/${student.id}`">{{$locales.t('app.options.details')}}</router-link> | 
-            <a href="Javascript:void(0);" @click="save(student, index)">{{$locales.t('app.options.edit')}}</a>
+            <router-link :to="`/students/${student.id}`">{{$locales.t('options.details')}}</router-link> | 
+            <a href="Javascript:void(0);" @click="save(student, index)">{{$locales.t('options.edit')}}</a>
           </td>
         </tr>
       </tbody>
@@ -78,5 +78,10 @@ export default {
 </script>
 
 <style>
-
+.pointer.desc:after {
+  content: "▲";
+}
+.pointer.asc:after {
+  content: "▼";
+}
 </style>

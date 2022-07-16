@@ -3,15 +3,15 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th>{{$locales.t('tbls.lessons.cols.name')}}</th>
-          <th v-if="studentDetails">{{$locales.t('tbls.lessons.cols.start')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.attend')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.quiz')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.homework')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.dictation')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.behaviour')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.interaction')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.paid')}}</th>
+          <th>{{$locales.t('lesson.name')}}</th>
+          <th v-if="studentDetails">{{$locales.t('lesson.start')}}</th>
+          <th>{{$locales.t('lesson.attend')}}</th>
+          <th>{{$locales.t('lesson.quiz')}}</th>
+          <th>{{$locales.t('lesson.homework')}}</th>
+          <th>{{$locales.t('lesson.dictation')}}</th>
+          <th>{{$locales.t('lesson.behaviour')}}</th>
+          <th>{{$locales.t('lesson.interaction')}}</th>
+          <th>{{$locales.t('lesson.paid')}}</th>
           <th ></th>
         </tr>
       </thead>
@@ -21,7 +21,7 @@
         </tr>
         <tr v-for="(studentLesson, index) in studentLessons" :key="'student-lesson-' + studentLesson.id">
           <td>{{studentDetails ? studentLesson.lesson.name : studentLesson.student.name}}</td>
-          <td v-if="studentDetails">{{$moment(studentLesson.date).local().locale($locales.current).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
+          <td v-if="studentDetails">{{$moment(studentLesson.date).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
           <td>{{$locales.t(`lookups.attend.${studentLesson.hasAttend ? '1' : '2'}`)}}</td>
           <td>{{studentLesson.quizDegree}}/{{studentLesson.lesson.quizDegree}}</td>
           <td>{{studentLesson.homeworkDegree}}/{{studentLesson.lesson.homeworkDegree}}</td>
@@ -30,8 +30,8 @@
           <td>{{studentLesson.interactionDegree}}/{{studentLesson.lesson.interactionDegree}}</td>
           <td>{{studentLesson.paidAmount}}</td>
           <td>
-            <a href="Javascript:void(0);" @click="save(studentLesson, index)">{{$locales.t('app.options.edit')}}</a> |
-            <a href="Javascript:void(0);" @click="remove(studentLesson, index)">{{$locales.t('app.options.delete')}}</a>
+            <a href="Javascript:void(0);" @click="save(studentLesson, index)">{{$locales.t('options.edit')}}</a> |
+            <a href="Javascript:void(0);" @click="remove(studentLesson, index)">{{$locales.t('options.delete')}}</a>
           </td>
         </tr>
       </tbody>

@@ -75,7 +75,7 @@
                         return new ChartPoint<DateTime, double>
                         {
                             Key = l.Key,
-                            Vaue = total == 0 ? 0 : degrees / total
+                            Value = total == 0 ? 0 : degrees / total
                         };
                     })
                     .ToList();
@@ -84,7 +84,7 @@
                 {
                     Name = "Student-Degrees",
                     Categories = _.Select(l => l.Key).ToArray(),
-                    Data = _.Select(l => l.Vaue).ToArray()
+                    Data = _.Select(l => l.Value).ToArray()
                 });
             }
             catch (Exception e)
@@ -111,6 +111,22 @@
                 group.StudentIds.Add(res);
                 await _groupFirestoreCollection.UpdateAsync(group.Id, group);
                 return StatusCode(StatusCodes.Status201Created, res);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("filter")]
+        public IActionResult Filter([FromBody] List<Student> students, [FromQuery] string queryFilter = null, [FromQuery] int pageNo = 1, [FromQuery] int pageSize = -1, [FromQuery] string orderDir = null, [FromQuery] string orderBy = null)
+        {
+            try
+            {
+                var filtered = students.Order(orderDir, orderBy)
+                    .CreateFilterExpression(queryFilter)
+                    .ToPage(pageNo, pageSize);
+                return StatusCode(StatusCodes.Status201Created, filtered);
             }
             catch (Exception e)
             {

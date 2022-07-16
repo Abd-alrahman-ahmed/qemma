@@ -3,13 +3,13 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th>{{$locales.t('tbls.lessons.cols.name')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.start')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.quiz')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.homework')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.dictation')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.behaviour')}}</th>
-          <th>{{$locales.t('tbls.lessons.cols.interaction')}}</th>
+          <th>{{$locales.t('lesson.name')}}</th>
+          <th>{{$locales.t('lesson.start')}}</th>
+          <th>{{$locales.t('lesson.quiz')}}</th>
+          <th>{{$locales.t('lesson.homework')}}</th>
+          <th>{{$locales.t('lesson.dictation')}}</th>
+          <th>{{$locales.t('lesson.behaviour')}}</th>
+          <th>{{$locales.t('lesson.interaction')}}</th>
           <th ></th>
         </tr>
       </thead>
@@ -19,16 +19,16 @@
         </tr>
         <tr v-for="(lesson, index) in lessons" :key="'lesson-' + lesson.id">
           <td>{{lesson.name}}</td>
-          <td>{{$moment(lesson.start).local().locale($locales.current).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
+          <td>{{$moment(lesson.start).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}</td>
           <td>{{lesson.quizDegree}}</td>
           <td>{{lesson.homeworkDegree}}</td>
           <td>{{lesson.inClassExamDegree}}</td>
           <td>{{lesson.behaviourDegree}}</td>
           <td>{{lesson.interactionDegree}}</td>
           <td>
-            <router-link :to="`/lessons/${lesson.id}`">{{$locales.t('app.options.details')}}</router-link> | 
-            <a href="Javascript:void(0);" @click="save(lesson, index)">{{$locales.t('app.options.edit')}}</a> |
-            <a href="Javascript:void(0);" @click="remove(lesson.id, index)">{{$locales.t('app.options.delete')}}</a>
+            <router-link :to="`/lessons/${lesson.id}`">{{$locales.t('options.details')}}</router-link> | 
+            <a href="Javascript:void(0);" @click="save(lesson, index)">{{$locales.t('options.edit')}}</a> |
+            <a href="Javascript:void(0);" @click="remove(lesson.id, index)">{{$locales.t('options.delete')}}</a>
           </td>
         </tr>
       </tbody>

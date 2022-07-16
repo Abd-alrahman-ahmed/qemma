@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <h1 class="mt-2 mb-5">{{$locales.t('views.groups.title')}}</h1>
+    <h1 class="mt-2 mb-5">{{$locales.t('groups.title')}}</h1>
     <!-- <button @click="save(null, 0)" class="btn btn-primary btn-sm text-white m-2">
-      <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('app.options.add')}}
+      <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('options.add')}}
     </button> -->
 
     <app-filter :filter-props="filterProps" @apply="applyFilter" />
@@ -10,9 +10,8 @@
       <table class="table">
         <thead>
           <tr>
-            <th>{{$locales.t('tbls.groups.cols.year')}}</th>
-            <th>{{$locales.t('tbls.groups.cols.price')}}</th>
-            <th>{{$locales.t('tbls.groups.cols.studetsCount')}}</th>
+            <th>{{$locales.t('group.year')}}</th>
+            <th>{{$locales.t('group.studetsCount')}}</th>
             <th ></th>
           </tr>
         </thead>
@@ -20,13 +19,11 @@
           <tr v-if="groups.length == 0">
             <td colspan="4"><empty-state /></td>
           </tr>
-          <tr v-for="(group, index) in groups" :key="'group-' + group.id">
+          <tr v-for="group in groups" :key="'group-' + group.id">
             <td>{{$locales.t(`lookups.year.${group.year}`)}}</td>
-            <td>{{group.price}}</td>
             <td>{{studentCount(group.studentIds)}}</td>
             <td>
-              <router-link :to="`/groups/${group.id}`">{{$locales.t('app.options.details')}}</router-link> | 
-              <a href="Javascript:void(0);" @click="save(group, index)">{{$locales.t('app.options.edit')}}</a>
+              <router-link :to="`/groups/${group.id}`">{{$locales.t('options.details')}}</router-link>
             </td>
           </tr>
         </tbody>
@@ -55,7 +52,7 @@ export default {
   computed: {
     filterProps() {
       return [
-        { name: this.$locales.t('tbls.groups.cols.year'), value: 'year', type: 'select', options: this.$locales.getYears() }
+        { name: this.$locales.t('group.year'), value: 'year', type: 'select', options: this.$locales.getYears() }
       ]
     }
   },
@@ -77,7 +74,7 @@ export default {
           queryFilter: filters
         }
       }).then(pageData => {
-        this.groups = pageData.data;
+        this.groups = pageData.data ?? [];
         this.count = pageData.count;
       });
     },

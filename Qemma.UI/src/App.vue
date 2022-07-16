@@ -1,38 +1,36 @@
 <template>
-  <div id="app" :dir="$locales.direction()">
-    <app-title-bar />
+  <div :key="'app-' + rand" id="app" :dir="$locales.direction()">
+    <app-title-bar :key="'title-bar-' + rand" />
     <div id="main">
-      <app-header />
+      <app-header :key="'header-' + rand" />
       <div class="container-fluid">
         <div class="row">
-          <app-side-bar v-if="isLogged" :tabs="sidebar" />
+          <app-sidebar :key="'sidebar-' + rand" v-if="isLogged" :tabs="sidebar" />
           <main role="main" :class="isLogged ? `col-9 col-lg-10 p-0` : `col-12 p-0`">
             <div class="container-fluid main-div">
               <router-view />
             </div>
-            <app-footer />
+            <app-footer :key="'footer-' + rand" />
           </main>
         </div>
       </div>
     </div>
-    <loading-spainner />
-    <delete-modal />
-    <save-student-modal />
-    <save-group-modal />
-    <save-lesson-modal />
-    <save-student-lesson-modal />
+    <loading-spainner :key="'loading-' + rand"/>
+    <delete-modal :key="'delete-' + rand"/>
+    <save-student-modal :key="'save-student-' + rand" />
+    <save-lesson-modal :key="'save-lesson-' + rand"/>
+    <save-student-lesson-modal :key="'save-student-lesson-' + rand"/>
   </div>
 </template>
 
 <script>
 import AppTitleBar from '@/components/AppTitleBar.vue'
-import AppSideBar from '@/components/AppSideBar.vue'
+import AppSidebar from '@/components/AppSideBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 import AppHeader from '@/components/AppHeader.vue'
 import LoadingSpainner from '@/components/LoadingSpainner.vue'
 import DeleteModal from '@/components/DeleteModal.vue'
 import SaveStudentModal from '@/components/SaveStudentModal.vue'
-import SaveGroupModal from '@/components/SaveGroupModal.vue'
 import SaveLessonModal from '@/components/SaveLessonModal.vue'
 import SaveStudentLessonModal from '@/components/SaveStudentLessonModal.vue'
 
@@ -41,56 +39,56 @@ export default {
   components: {
     AppTitleBar,
     AppHeader,
-    AppSideBar,
+    AppSidebar,
     AppFooter,
     LoadingSpainner,
     DeleteModal,
     SaveStudentModal,
-    SaveGroupModal,
     SaveLessonModal,
     SaveStudentLessonModal
   },
   data: () => ({
+    rand: 1,
     isLogged: false,
     sidebar: [
+      // {
+      //   name: 'home',
+      //   action: 'redirect',
+      //   to: '/',
+      //   icon: 'fas fa-house-user'
+      // },
       {
-        name: 'tabs.home',
-        action: 'redirect',
-        to: '/',
-        icon: 'fas fa-house-user'
-      },
-      {
-        name: 'tabs.students',
+        name: 'students.title',
         icon: 'fas fa-user-graduate',
         children: [
           {
-            name: 'tabs.students.list',
+            name: 'students.list',
             action: 'redirect',
             to: '/students',
             icon: 'fas fa-users'
           },
           {
-            name: 'tabs.students.new',
-            action: 'emit',
-            to: 'init-save-student-modal',
-            icon: 'fas fa-user-plus'
+            name: 'students.pending',
+            action: 'redirect',
+            to: '/students/pending',
+            icon: 'fas fa-clock'
           }
         ]
       },
       {
-        name: 'tabs.groups',
+        name: 'groups.title',
         icon: 'fas fa-users',
         action: 'redirect',
         to: '/groups',
         // children: [
         //   {
-        //     name: 'tabs.groups.list',
+        //     name: 'groups.list',
         //     action: 'redirect',
         //     to: '/groups',
         //     icon: 'fas fa-users-rectangle'
         //   },
         //   {
-        //     name: 'tabs.groups.new',
+        //     name: 'groups.new',
         //     action: 'emit',
         //     to: 'init-save-group-modal',
         //     icon: 'fas fa-users-gear'
@@ -98,19 +96,19 @@ export default {
         // ]
       },
       {
-        name: 'tabs.events',
+        name: 'events',
         icon: 'fas fa-calendar-alt',
         action: 'redirect',
         to: '/events',
         // children: [
         //   {
-        //     name: 'tabs.events.list',
+        //     name: 'events.list',
         //     action: 'redirect',
         //     to: '/events',
         //     icon: 'fas fa-calendar-alt'
         //   },
         //   {
-        //     name: 'tabs.events.new',
+        //     name: 'events.new',
         //     action: 'emit',
         //     to: 'init-save-event-modal',
         //     icon: 'fas fa-calendar-plus'
@@ -120,6 +118,7 @@ export default {
     ]
   }),
   created() {
+    this.$bus.$on('refresh-app', this.refresh);
     this.isLogged = sessionStorage.getItem(this.$helper.userKey) != null;
     this.$bus.$on('user-log-in', () => {
       this.isLogged = true;
@@ -128,6 +127,12 @@ export default {
       this.isLogged = false;
     });
     this.$locales.setLocale(localStorage.lang || 'ar');
+  },
+  methods: {
+    refresh() {
+      this.$locales.setLocale(localStorage.lang || 'ar');
+      this.rand = Math.floor(Math.random() * 237859234);
+    }
   }
 }
 </script>

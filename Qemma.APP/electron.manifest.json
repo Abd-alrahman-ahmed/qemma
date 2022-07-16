@@ -1,20 +1,23 @@
 {
   "executable": "Qemma.APP",
   "splashscreen": {
-    "imageFile": ""
+    "imageFile": "./wwwroot/splashscreen.png"
   },
-  "name": "Qemma.APP",
+  "name": "Al-Qemma",
   "author": "",
   "singleInstance": false,
   "environment": "Production",
   "build": {
-    "appId": "com.Qemma.APP.app",
-    "productName": "Qemma.APP",
-    "copyright": "Copyright © 2020",
+    "appId": "com.qemma.app",
+    "productName": "Al-Qemma",
+    "copyright": "Copyright © 2022",
     "buildVersion": "1.0.0",
     "compression": "maximum",
     "directories": {
       "output": "../../../bin/Desktop"
+    },
+    "win": {
+      "icon": "../../../wwwroot/favicon.ico"
     },
     "extraResources": [
       {

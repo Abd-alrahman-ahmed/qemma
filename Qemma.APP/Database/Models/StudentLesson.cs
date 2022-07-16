@@ -1,6 +1,6 @@
 ﻿namespace Qemma.APP.Database.Models
 {
-    [CollectionName("StudentLessons")]
+    [CollectionName("student_lessons")]
     [FirestoreData(ConverterType = typeof(FirestoreConverter<StudentLesson>), UnknownPropertyHandling = UnknownPropertyHandling.Ignore)]
     public class StudentLesson
     {

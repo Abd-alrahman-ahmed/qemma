@@ -3,8 +3,8 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th>{{$locales.t('tbls.groupdates.cols.day')}}</th>
-          <th>{{$locales.t('tbls.groupdates.cols.starttime')}}</th>
+          <th>{{$locales.t('group.day')}}</th>
+          <th>{{$locales.t('group.starttime')}}</th>
           <th ></th>
         </tr>
       </thead>
@@ -14,9 +14,9 @@
         </tr>
         <tr v-for="(date, index) in dates" :key="'date-' + date.id">
           <td>{{date.day}}</td>
-          <td>{{$moment(date.startTime).local().locale($locales.current).format('h:mm:ss a')}}</td>
+          <td>{{$moment(date.startTime).local().locale($locales.getCurrentLocaleCode()).format('h:mm:ss a')}}</td>
           <td>
-            <a href="Javascript:void(0);" @click="save(date, index)">{{$locales.t('app.options.edit')}}</a>
+            <a href="Javascript:void(0);" @click="save(date, index)">{{$locales.t('options.edit')}}</a>
           </td>
         </tr>
       </tbody>

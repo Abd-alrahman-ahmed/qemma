@@ -1,6 +1,6 @@
 <template>
   <div class="students">
-    <h1 class="mt-2 mb-5">{{$locales.t('views.studentdetails.title')}}</h1>
+    <h1 class="mt-2 mb-5">{{$locales.t('student.details.title')}}</h1>
     
     <div class="card mb-2" >
       <div class="row d-flex align-items-center">
@@ -12,17 +12,17 @@
         <div class="col-md-10">
           <div class="row card-body">
             <div class="col-4">
-              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.students.cols.name')">{{student.name}}</h5>
-              <h6 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.students.cols.year')">{{$locales.t(`lookups.year.${student.year}`)}}</h6>
-              <p class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.students.cols.code')">{{student.id}}</p>  
+              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.name')">{{student.name}}</h5>
+              <h6 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.year')">{{$locales.t(`lookups.year.${student.year}`)}}</h6>
+              <p class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.code')">{{student.id}}</p>  
             </div>
             <div class="col-4 card-delimiter">
-              <h3 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.students.cols.degree')">{{studentDegree}}</h3>
-              <h3 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.students.cols.degree')">{{student.degree / student.degree * 100}}%</h3>
+              <h3 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{studentDegree}}</h3>
+              <h3 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('student.degree')">{{student.totalDegree == 0 ? '--' : student.degree / student.totalDegree * 100 + '%'}}</h3>
             </div>
             <div class="col-4">
               <a href="Javascript:void(0);" @click="saveStudent">
-                <font-awesome-icon icon="fas fa-pen" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('app.options.edit')"/>
+                <font-awesome-icon icon="fas fa-pen" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('options.edit')"/>
               </a>
             </div>
           </div>
@@ -32,9 +32,9 @@
     <hr />
 
     <!-- lessons -->
-    <h5 class="mt-5 mb-4">{{$locales.t('views.lessons.title')}}
+    <h5 class="mt-5 mb-4">{{$locales.t('lessons.title')}}
       <button @click="saveStudentLesson" class="btn btn-primary btn-sm text-white m-2">
-        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('app.options.add')}}
+        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('options.add')}}
       </button>
     </h5>
     <app-filter :init-filter="initLessonFilter" :filter-props="lessonFilterProps" @apply="applyLessonsFilter" />
@@ -43,9 +43,10 @@
     <hr />
     
     <!-- charts -->
-    <h5 class="mt-5 mb-4">{{$locales.t('views.studentdetails.charts')}}</h5>
+    <h5 class="mt-5 mb-4">{{$locales.t('student.details.charts')}}</h5>
     <chart-filter :grouping-options="chartGroupingOptions" @apply="applyChartFilter" />
-    <apexchart height="400" type="bar" :options="chartOptions" :series="series" />
+    <apexchart v-if="chartHasData" height="400" type="bar" :options="chartOptions" :series="series" />
+    <empty-state v-else />
   </div>
 </template>
 
@@ -67,10 +68,13 @@ export default {
     categories: []
   }),
   computed: {
+    chartHasData() {
+      return this.series && this.series.length > 0 && this.series[0].data && this.series[0].data.length > 0;
+    },
     chartOptions() {
       return {
         noData: {
-          text: this.$locales.t('app.emptystate.default'),
+          text: this.$locales.t('emptystate.default'),
           style: {
             fontSize: '32px',
             fontFamily: "'Droid Arabic Kufi', serif",
@@ -88,20 +92,19 @@ export default {
       }
     },
     studentDegree() {
-      var translateKey = "app.degree.";
+      var translateKey = "lookups.degree.";
       var degree = this.student.degree / this.student.degree * 100;
       if (degree >= 85) translateKey += "1";
       else if (degree >= 75) translateKey += "2";
       else if (degree >= 60) translateKey += "3";
       else if (degree >= 50) translateKey += "4";
-      else translateKey += "5"
+      else if (degree < 50) translateKey += "5"
+      else translateKey += "6"
 
       return this.$locales.t(translateKey);
     },
-    lessonFilterProps() {
-      return [
-        { name: this.$locales.t('tbls.groups.cols.year'), value: 'year', type: 'select', options: this.$locales.getYears() }
-      ]
+    lessonFilterProps() { 
+      return this.$locales.getLessonsFilterProps();
     },
     initLessonFilter() {
       return [
@@ -147,7 +150,7 @@ export default {
           queryFilter: filters
         }
       }).then(pageData => {
-        this.lessons = pageData.data;
+        this.lessons = pageData.data ?? [];
         this.lessonsCount = pageData.count;
       });
     },

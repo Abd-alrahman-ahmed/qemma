@@ -61,8 +61,15 @@
                 if (lesson.StudentIds is null) lesson.StudentIds = new List<string>();
 
                 var res = await _studentLessonFirestoreCollection.AddAsync(studentLesson);
+                
                 student.LessonIds.Add(res);
+                student.TotalDegree += lesson.QuizDegree + lesson.InClassExamDegree
+                    + lesson.HomeworkDegree + lesson.BehaviourDegree + lesson.InteractionDegree;
+
+                student.Degree += studentLesson.QuizDegree + studentLesson.InClassExamDegree 
+                    + studentLesson.HomeworkDegree + studentLesson.BehaviourDegree + studentLesson.InteractionDegree;
                 await _studentFirestoreCollection.UpdateAsync(studentId, student);
+
                 lesson.StudentIds.Add(res);
                 await _lessonFirestoreCollection.UpdateAsync(lessonId, lesson);
 

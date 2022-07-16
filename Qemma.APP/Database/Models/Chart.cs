@@ -9,7 +9,7 @@
 
     public class ChartPoint<TKey, TValue>
     {
-        public TValue Vaue { get; set; }
+        public TValue Value { get; set; }
         public TKey Key { get; set; }
     }
 }

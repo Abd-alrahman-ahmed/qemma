@@ -5,91 +5,91 @@
         <div class="col-12">
           <div v-if="!isEdit && studentMissing" class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.studentname")}}</label>
+              <label class="control-label">{{$locales.t("lesson.studentname")}}</label>
               <v-select :dir="$locales.direction()" :clearable="true" :options="students" :reduce="student => student.id" label="name" 
-                v-model="model.studentId" :placeholder="$locales.t('forms.lessons.studentname.ph')" 
+                v-model="model.studentId" :placeholder="$locales.t('lesson.studentname.ph')" 
                 required @option:selected="studentChanged">
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="studentId" 
-                data-validation-rule="v => v != '' || 'forms.lessons.studentname.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'lesson.studentname.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div v-if="!isEdit && lessonMissing" class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.lessonname")}}</label>
+              <label class="control-label">{{$locales.t("lesson.lessonname")}}</label>
               <v-select :dir="$locales.direction()" :clearable="true" :options="lessons" :reduce="lesson => lesson.id" label="name" 
-                v-model="model.lessonId" :placeholder="$locales.t('forms.lessons.lessonname.ph')" 
+                v-model="model.lessonId" :placeholder="$locales.t('lesson.lessonname.ph')" 
                 required @option:selected="lessonChanged">
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="lessonId" 
-                data-validation-rule="v => v != '' || 'forms.lessons.lessonname.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'lesson.lessonname.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.attend")}}</label>
+              <label class="control-label">{{$locales.t("lesson.attend")}}</label>
               <v-select :dir="$locales.direction()" :clearable="false" :options="getAttendStaus" :reduce="attend => attend.state" label="name" 
-                v-model="model.hasAttend" :placeholder="$locales.t('forms.lessons.attend.ph')" required>
+                v-model="model.hasAttend" :placeholder="$locales.t('lesson.attend.ph')" required>
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="lessonId" 
-                data-validation-rule="v => v != '' || 'forms.lessons.attend.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'lesson.attend.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.paid")}}</label>
+              <label class="control-label">{{$locales.t("lesson.paid")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.paidAmount" 
-                :placeholder="$locales.t('forms.lessons.paid.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.paid.ph')" min="0" max="99999999" />
               <span data-validation-prop="paidAmount" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.paid.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.paid.invalid'" class="invalid-feedback" />
             </div>
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.quiz")}}</label>
+              <label class="control-label">{{$locales.t("lesson.quiz")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.quizDegree" 
-                :placeholder="$locales.t('forms.lessons.quiz.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.quiz.ph')" min="0" max="99999999" />
               <span data-validation-prop="quizDegree" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.quiz.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.quiz.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.homework")}}</label>
+              <label class="control-label">{{$locales.t("lesson.homework")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.homeworkDegree" 
-                :placeholder="$locales.t('forms.lessons.homework.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.homework.ph')" min="0" max="99999999" />
               <span data-validation-prop="homeworkDegree" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.homework.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.homework.invalid'" class="invalid-feedback" />
             </div>
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.dictation")}}</label>
+              <label class="control-label">{{$locales.t("lesson.dictation")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.inClassExamDegree" 
-                :placeholder="$locales.t('forms.lessons.dictation.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.dictation.ph')" min="0" max="99999999" />
               <span data-validation-prop="inClassExamDegree" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.dictation.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.dictation.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.behaviour")}}</label>
+              <label class="control-label">{{$locales.t("lesson.behaviour")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.behaviourDegree" 
-                :placeholder="$locales.t('forms.lessons.behaviour.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.behaviour.ph')" min="0" max="99999999" />
               <span data-validation-prop="behaviourDegree" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.behaviour.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.behaviour.invalid'" class="invalid-feedback" />
             </div>
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.interaction")}}</label>
+              <label class="control-label">{{$locales.t("lesson.interaction")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.interactionDegree" 
-                :placeholder="$locales.t('forms.lessons.interaction.ph')" min="0" max="99999999" />
+                :placeholder="$locales.t('lesson.interaction.ph')" min="0" max="99999999" />
               <span data-validation-prop="interactionDegree" 
-                data-validation-rule="v => v >= 0 || 'forms.lessons.interaction.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v >= 0 || 'lesson.interaction.invalid'" class="invalid-feedback" />
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default {
   }),
   computed: {
     title() {
-      let option = !this.isEdit ? "app.options.add" : "app.options.edit";
+      let option = !this.isEdit ? "options.add" : "options.edit";
       return this.$locales.t(option);
     }, 
     getAttendStaus() {
@@ -177,7 +177,7 @@ export default {
           queryFilter: `groupId eq ${groupId}`
         }
       }).then(pageData => {
-        this.lessons = pageData.data;
+        this.lessons = pageData.data ?? [];
       });
     },
     getStudents(groupId) {
@@ -187,7 +187,7 @@ export default {
           queryFilter: `groupIds array_contains ${groupId}`
         }
       }).then(pageData => {
-        this.students = pageData.data;
+        this.students = pageData.data ?? [];
       });
     },
     dismiss() {

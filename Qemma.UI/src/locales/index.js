@@ -1,13 +1,12 @@
-import ar from '@/assets/locales/ar.json'
-import en from '@/assets/locales/en.json'
+import Vue from 'vue'
 
 var locales = {
-  current: 'ar',
-  ar: ar,
-  en: en,
-  dir: {
-    'ar': 'rtl',
-    'en': 'ltr'
+  current: {rtl: true},
+  _locales: [],
+
+  init: function(locales) {
+    this._locales = locales;
+    Vue.prototype.$bus.$emit("locales-loaded");
   },
 
   /* t alias for translate */
@@ -17,17 +16,21 @@ var locales = {
   
   translate: function(key) {
     let text = key;
-    if (key in this[this.current])
-      text = this[this.current][key];
-    return text;
+    if (this.current && this.current.translations && key in this.current.translations)
+      text = this.current.translations[key];
+    return text; 
   },
 
   direction: function() {
-    return this.dir[this.current];
+    return this.current.rtl ? 'rtl' : 'ltr';
   },
 
   setLocale: function(lang) {
-    this.current = lang;
+    this.current = this._locales.find(l => l.code == lang) ?? {rtl: true};
+  },
+
+  getCurrentLocaleCode() {
+    return this.current?.code ?? 'ar';
   },
 
   getGenders() {
@@ -64,18 +67,26 @@ var locales = {
 
   getStudentFilterProps() {
     return [
-      { name: this.translate('tbls.students.cols.registrationdate'), value: 'registrationDate', type: 'datetime-local' },
-      { name: this.translate('tbls.students.cols.gender'), value: 'gender', type: 'select', options: this.getGenders() },
-      { name: this.translate('tbls.students.cols.year'), value: 'year', type: 'select', options: this.getYears() },
-      { name: this.translate('tbls.students.cols.degree'), value: 'degree', type: 'number' },
-      { name: this.translate('tbls.students.cols.status'), value: 'status', type: 'select', options: this.getStatus() }
+      { name: this.translate('student.name'), value: 'name', type: 'text', operations: ['contains'] },
+      { name: this.translate('student.registrationdate'), value: 'registrationDate', type: 'datetime-local', operations: ['ge', 'le'] },
+      { name: this.translate('student.gender'), value: 'gender', type: 'select', options: this.getGenders(), operations: ['eq', 'neq'] },
+      { name: this.translate('student.year'), value: 'year', type: 'select', options: this.getYears(), operations: ['eq', 'neq'] },
+      { name: this.translate('student.degree'), value: 'degree', type: 'number', operations: ['eq', 'neq', 'le', 'ge'] },
+      { name: this.translate('student.status'), value: 'status', type: 'select', options: this.getStatus(), operations: ['eq', 'neq'] }
+    ]
+  },
+
+  getLessonsFilterProps() {
+    return [
+      { name: this.translate('lesson.name'), value: 'name', type: 'text', operations: ['contains'] },
+      { name: this.translate('lesson.start'), value: 'start', type: 'datetime-local', operations: ['ge', 'le'] },
     ]
   },
 
   chartGroupingOptions() {
     return [
-      { name: this.translate('app.charts.monthly'), id: 1 },
-      { name: this.translate('app.charts.daily'), id: 2 }
+      { name: this.translate('filter.monthly'), id: 1 },
+      { name: this.translate('filter.daily'), id: 2 }
     ]
   },
 

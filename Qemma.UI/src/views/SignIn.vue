@@ -5,19 +5,19 @@
     </div>
     <base-form :model="model" ref="form" class="form-signin">
       <div class="form-group">
-        <label class="control-label">{{$locales.t('forms.signin.username')}}</label>
+        <label class="control-label">{{$locales.t('signin.username')}}</label>
         <input onfocus="this.select();" class="form-control mb-0" required v-model="model.username" 
-          :placeholder="$locales.t('forms.signin.username.ph')" />
+          :placeholder="$locales.t('signin.username.ph')" />
         <span data-validation-prop="username" 
-          data-validation-rule="v => v != '' || 'forms.signin.username.invalid'" />
+          data-validation-rule="v => v != '' || 'signin.username.invalid'" />
       </div>
       <div class="form-group">
-        <label class="control-label">{{$locales.t('forms.signin.password')}}</label>
+        <label class="control-label">{{$locales.t('signin.password')}}</label>
         <div class="input-group">
           <input onfocus="this.select();" class="form-control mb-0" :type="showPassword ? 'text' : 'password'" 
-            required v-model="model.password" :placeholder="$locales.t('forms.signin.password.ph')" />
+            required v-model="model.password" :placeholder="$locales.t('signin.password.ph')" />
           <span data-validation-prop="password"
-            data-validation-rule="v => v != '' || 'forms.signin.password.invalid'" />
+            data-validation-rule="v => v != '' || 'signin.password.invalid'" />
           <div class="input-group-append">
             <span class="input-group-text" id="basic-addon2" @click="() => showPassword=!showPassword">
               <font-awesome-icon v-if="showPassword" icon="fas fa-eye-slash" />
@@ -27,8 +27,8 @@
         </div>
       </div>
       <span data-after-submit-prop="password"
-        :data-after-submit-message="$locales.t('forms.signin.invalid')" />
-      <button class="btn btn-lg btn-primary btn-block" type="submit" @click="signin">{{$locales.t('forms.signin.btn')}}</button>
+        :data-after-submit-message="$locales.t('signin.invalid')" />
+      <button class="btn btn-lg btn-primary btn-block" type="submit" @click="signin">{{$locales.t('signin.btn')}}</button>
     </base-form>
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
       e.stopPropagation()
       if (!this.$refs.form.validate()) return;
       this.$http.send({
-        url: `${this.$BACKEND_APP_URL}/accounts/signin`,
+        url: `${this.$BACKEND_APP_URL}/system/login`,
         method: 'POST',
         data: this.model
       }).then(data => {

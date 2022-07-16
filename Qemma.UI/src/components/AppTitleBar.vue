@@ -9,9 +9,6 @@
           <div v-if="isLogged" class="controls-button cursor-pointer pt-2" @click="logout">
             <font-awesome-icon class="minimize mx-2" icon="fas fa-right-from-bracket" draggable="false" />
           </div>
-          <div class="controls-button cursor-pointer pt-2" @click="reload">
-            <font-awesome-icon class="minimize mx-2" icon="fas fa-rotate-right" draggable="false" />
-          </div>
           <div class="controls-button cursor-pointer pt-2" @click="minimize">
             <font-awesome-icon class="minimize mx-2" icon="fas fa-minus" draggable="false" />
           </div>
@@ -52,23 +49,20 @@ export default {
     this.$locales.setLocale(localStorage.lang || 'ar');
   },
   methods: {
-    reload() {
-      this.$router.go();
-    },
     minimize() {
-      // const { ipcRenderer } = require("electron");
-      // ipcRenderer.send('minimize');
+      const { ipcRenderer } = require("electron");
+      ipcRenderer.send('minimize');
     },
     maximize() {
-      // const { ipcRenderer } = require("electron");
-      // ipcRenderer.send('maximize');
+      const { ipcRenderer } = require("electron");
+      ipcRenderer.send('maximize');
     },
     close() {
       this.dialog = true;
     },
     closeApp() {
-      // const { ipcRenderer } = require("electron");
-      // ipcRenderer.send('close');
+      const { ipcRenderer } = require("electron");
+      ipcRenderer.send('close');
     },
     logout() {
       this.logoutDialog = true;

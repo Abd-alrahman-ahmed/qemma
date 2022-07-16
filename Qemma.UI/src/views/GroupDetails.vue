@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="mt-2 mb-5">{{$locales.t('views.groupdetails.title')}}</h1>
+    <h1 class="mt-2 mb-5">{{$locales.t('group.details.title')}}</h1>
 
     <!-- group details -->
     <div class="card mb-2" >
@@ -10,24 +10,16 @@
         </div>
         <div class="col-md-10">
           <div class="row card-body">
-            <div class="col-4">
-              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.groups.cols.year')">
+            <div class="col-6">
+              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('group.year')">
                 {{$locales.t(`lookups.year.${group.year}`)}}
               </h5>
               <h6 class="card-text"> 
-                {{$locales.t('tbls.groups.cols.studetsCount')}}: {{studentsCount}}
+                {{$locales.t('group.studetsCount')}}: {{studentsCount}}
               </h6>
               <h6 class="card-text"> 
-                {{$locales.t('tbls.groups.cols.lessonsCount')}}: {{lessonsCount}}
+                {{$locales.t('group.lessonsCount')}}: {{lessonsCount}}
               </h6>
-              <h6 class="card-text">
-                {{$locales.t('tbls.groups.cols.price')}}: {{group.price}}
-              </h6>
-            </div>
-            <div class="col-8">
-              <a href="Javascript:void(0);" @click="saveGroup">
-                <font-awesome-icon icon="fas fa-pen" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('app.options.edit')"/>
-              </a>
             </div>
           </div>
         </div>
@@ -35,16 +27,16 @@
     </div>
     <hr />
     
-    <!-- <h5 class="mt-2 mb-4">{{$locales.t('views.groupdetails.dates')}} 
+    <!-- <h5 class="mt-2 mb-4">{{$locales.t('group.details.dates')}} 
       <button @click="saveGroupDate(null, 0)" class="btn btn-primary btn-sm text-white m-2">
-        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('app.options.add')}}
+        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('options.add')}}
       </button>
     </h5>
     <group-dates-table :dates="group.dates" />
     <hr/> -->
 
     <!-- students -->
-    <h5 class="mt-2 mb-4">{{$locales.t('views.students.title')}}</h5>
+    <h5 class="mt-2 mb-4">{{$locales.t('students.title')}}</h5>
     <app-filter :init-filter="initStudentFilter" :filter-props="studntFilterProps" @apply="applyStudentFilter" />
     <students-table :students="students" />
     <app-pagination :totalCount="studentsCount" @changePage="getStudents" />
@@ -52,9 +44,9 @@
     <hr/>
     
     <!-- lessons -->
-    <h5 class="mt-2 mb-4">{{$locales.t('views.lessons.title')}}
+    <h5 class="mt-2 mb-4">{{$locales.t('lessons.title')}}
       <button @click="saveGroupLesson(null, 0)" class="btn btn-primary btn-sm text-white m-2">
-        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('app.options.add')}}
+        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('options.add')}}
       </button>
     </h5>
     <app-filter :init-filter="initLessonFilter" :filter-props="lessonFilterProps" @apply="applyLessonsFilter" />
@@ -89,9 +81,7 @@ export default {
       ]
     },
     lessonFilterProps() {
-      return [
-        { name: this.$locales.t('tbls.groups.cols.year'), value: 'year', type: 'select', options: this.$locales.getYears() }
-      ]
+      return this.$locales.getLessonsFilterProps();
     },
     initLessonFilter() {
       return [
@@ -139,7 +129,7 @@ export default {
           queryFilter: filters
         }
       }).then(pageData => {
-        this.students = pageData.data;
+        this.students = pageData.data ?? [];
         this.studentsCount = pageData.count;
       });
     },
@@ -155,7 +145,7 @@ export default {
           queryFilter: filters
         }
       }).then(pageData => {
-        this.lessons = pageData.data;
+        this.lessons = pageData.data ?? [];
         this.lessonsCount = pageData.count;
       });
     },

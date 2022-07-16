@@ -5,59 +5,36 @@
         <div class="col-12">
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.name")}}</label>
+              <label class="control-label">{{$locales.t("lesson.name")}}</label>
               <input type="text" onfocus="this.select();" class="form-control" v-model="model.name" 
-                :placeholder="$locales.t('forms.lessons.name.ph')" />
+                :placeholder="$locales.t('lesson.name.ph')" />
               <span data-validation-prop="name" 
-                data-validation-rule="v => v != '' || 'forms.lessons.name.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'lesson.name.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.starttime")}}</label>
+              <label class="control-label">{{$locales.t("lesson.starttime")}}</label>
               <input type="datetime-local" onfocus="this.select();" class="form-control" v-model="model.start" 
-                :placeholder="$locales.t('forms.lessons.starttime.ph')" />
+                :placeholder="$locales.t('lesson.starttime.ph')" />
               <span data-validation-prop="start" 
-                data-validation-rule="v => v != '' || 'forms.lessons.starttime.invalid'" class="invalid-feedback" />
-            </div>
-            <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.quiz")}}</label>
-              <input type="number" onfocus="this.select();" class="form-control" v-model="model.quizDegree" 
-                :placeholder="$locales.t('forms.lessons.quiz.ph')" min="1" max="99999999" />
-              <span data-validation-prop="quizDegree" 
-                data-validation-rule="v => v > 0 || 'forms.lessons.quiz.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'lesson.starttime.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.homework")}}</label>
-              <input type="number" onfocus="this.select();" class="form-control" v-model="model.homeworkDegree" 
-                :placeholder="$locales.t('forms.lessons.homework.ph')" min="1" max="99999999" />
-              <span data-validation-prop="homeworkDegree" 
-                data-validation-rule="v => v > 0 || 'forms.lessons.homework.invalid'" class="invalid-feedback" />
-            </div>
-            <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.dictation")}}</label>
+              <label class="control-label">{{$locales.t("lesson.dictation")}}</label>
               <input type="number" onfocus="this.select();" class="form-control" v-model="model.inClassExamDegree" 
-                :placeholder="$locales.t('forms.lessons.dictation.ph')" min="1" max="99999999" />
+                :placeholder="$locales.t('lesson.dictation.ph')" min="1" max="99999999" />
               <span data-validation-prop="inClassExamDegree" 
-                data-validation-rule="v => v > 0 || 'forms.lessons.dictation.invalid'" class="invalid-feedback" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.behaviour")}}</label>
-              <input type="number" onfocus="this.select();" class="form-control" v-model="model.behaviourDegree" 
-                :placeholder="$locales.t('forms.lessons.behaviour.ph')" min="1" max="99999999" />
-              <span data-validation-prop="behaviourDegree" 
-                data-validation-rule="v => v > 0 || 'forms.lessons.behaviour.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v > 0 || 'lesson.dictation.invalid'" class="invalid-feedback" />
             </div>
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.lessons.interaction")}}</label>
-              <input type="number" onfocus="this.select();" class="form-control" v-model="model.interactionDegree" 
-                :placeholder="$locales.t('forms.lessons.interaction.ph')" min="1" max="99999999" />
-              <span data-validation-prop="interactionDegree" 
-                data-validation-rule="v => v > 0 || 'forms.lessons.interaction.invalid'" class="invalid-feedback" />
+              <label class="control-label">{{$locales.t("lesson.quiz")}}</label>
+              <input type="number" onfocus="this.select();" class="form-control" v-model="model.quizDegree" 
+                :placeholder="$locales.t('lesson.quiz.ph')" min="1" max="99999999" />
+              <span data-validation-prop="quizDegree" 
+                data-validation-rule="v => v > 0 || 'lesson.quiz.invalid'" class="invalid-feedback" />
             </div>
           </div>
         </div>
@@ -80,8 +57,8 @@ export default {
   data: () => ({
     model: {
       id: '', name: '', teacherName: '', start: '',
-      quizDegree: 0, homeworkDegree: 0, inClassExamDegree: 0,
-      behaviourDegree: 0, interactionDegree: 0, groupId: ''
+      quizDegree: 0, homeworkDegree: 5, inClassExamDegree: 0,
+      behaviourDegree: 5, interactionDegree: 5, groupId: ''
     },
     isEdit: false,
     id: 0,
@@ -89,7 +66,7 @@ export default {
   }),
   computed: {
     title() {
-      let option = !this.isEdit ? "app.options.add" : "app.options.edit";
+      let option = !this.isEdit ? "options.add" : "options.edit";
       return this.$locales.t(option);
     }
   },
@@ -97,8 +74,8 @@ export default {
     this.$bus.$on("init-save-lesson-modal", (lesson=null, id=0, groupId='') => {
       this.model = Object.assign({}, {
         id: '', name: '', teacherName: '', start: '',
-        quizDegree: 0, homeworkDegree: 0, inClassExamDegree: 0,
-        behaviourDegree: 0, interactionDegree: 0, groupId: groupId
+        quizDegree: 0, homeworkDegree: 5, inClassExamDegree: 0,
+        behaviourDegree: 5, interactionDegree: 5, groupId: groupId
       });
       if (lesson != null) {
         lesson.start = this.$moment(lesson.start).local().format("YYYY-MM-DDThh:mm");

@@ -33,7 +33,7 @@ export default {
     changeLang(code) {
       if (localStorage.lang == code) return;
       localStorage.lang = code;
-      this.$router.go();
+      this.$bus.$emit('refresh-app');
     }
   }
 }

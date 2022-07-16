@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "75546032968",
+    "project_id": "al-qemma-english-center",
+    "storage_bucket": "al-qemma-english-center.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75546032968:android:51227e0246ebff2815d17d",
+        "android_client_info": {
+          "package_name": "com.example.qemma_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75546032968-gccei1muof28kkbtt5sdgsruh3o42bh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2jMeIT6ypBtieVTC4Uqflfp4LP9jIfEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75546032968-gccei1muof28kkbtt5sdgsruh3o42bh7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

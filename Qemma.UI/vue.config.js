@@ -12,6 +12,6 @@ module.exports = {
     },
   },
   configureWebpack: {
-    //target: "electron-renderer"
+    target: "electron-renderer"
   }
 }

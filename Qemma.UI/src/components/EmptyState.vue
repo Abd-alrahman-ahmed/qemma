@@ -19,7 +19,7 @@ export default {
     message: {
       type: String,
       required: false,
-      default: 'app.emptystate.default'
+      default: 'emptystate.default'
     }
   }
 }

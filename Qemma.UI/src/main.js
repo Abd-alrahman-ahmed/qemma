@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import LoadingSpainner from '@/components/LoadingSpainner.vue'
 import router from './router'
 import jQuery from 'jquery'
 import moment from 'moment'
@@ -43,7 +44,8 @@ Vue.prototype.$http = new HttpService();
 Vue.prototype.$helper = new Helper();
 Vue.prototype.$moment = moment;
 Vue.prototype.$locales = locales;
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
 if (process.env.NODE_ENV === 'development'){
   Vue.prototype.$BACKEND_APP_URL = 'https://localhost:44310/api'
 } else {
@@ -53,30 +55,34 @@ if (process.env.NODE_ENV === 'development'){
 Array.prototype.removeIf = function(callback) {
   var i = this.length;
   while (i--) {
-    if (callback(this[i], i)) {
-      this.splice(i, 1);
-    }
+      if (callback(this[i], i)) {
+          this.splice(i, 1);
+      }
   }
 };
 
-Date.prototype.format = function(format) {
-  let z = {
-    M: this.getMonth() + 1,
-    d: this.getDate(),
-    h: this.getHours(),
-    m: this.getMinutes(),
-    s: this.getSeconds()
-  };
-  format = format.replace(/(M+|d+|h+|m+|s+)/g, function(v) {
-    return ((v.length > 1 ? "0" : "") + z[v.slice(-1)]).slice(-2)
-  });
-
-  return format.replace(/(y+)/g, function(v) {
-    return this.getFullYear().toString().slice(-v.length)
-  }.bind(this));
-}
-
-new Vue({
+var loading = new Vue({
   router,
-  render: h => h(App)
-}).$mount('#app')
+  render: h => h(LoadingSpainner),
+}).$mount('#loader');
+
+Vue.prototype.$http.send({
+  url: `${Vue.prototype.$BACKEND_APP_URL}/system/locales`
+}).then(data => {
+  Vue.prototype.$locales.init(data);
+  createApp();
+}).catch(_ => {
+  createApp();
+});
+
+function createApp() {
+  // destroy the vue listeners, etc
+  loading.$destroy();
+
+  // remove the element from the DOM
+  loading.$el.parentNode.removeChild(loading.$el);
+  new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app');
+}

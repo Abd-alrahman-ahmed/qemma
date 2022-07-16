@@ -75,13 +75,7 @@ export class HttpService {
         let data = response.data;
         resolve(data);
       }).catch(e => {
-        if (e.response && e.response.status == 404) {
-          //router.push('/404').catch(e => {});
-        } else if (!e.response || e.response.status == 500) {
-          //router.push('/500').catch(e => {});
-        } else {
-          rejection(e);
-        }
+        rejection(e);
       }).finally(() => {
         --HttpService.#requestCount;
         if(loading && HttpService.#requestCount == 0)

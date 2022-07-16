@@ -55,7 +55,7 @@ namespace Qemma.APP.Extensions
                 }
                 dictionary.Add(key, newList);
             }
-            else if (propertyType.IsClass && propertyType != typeof(string))
+            else if (value is not IDictionary && propertyType.IsClass && propertyType != typeof(string))
                 dictionary.Add(key, value.ToDictionary());
             else
                 dictionary.Add(key, value);

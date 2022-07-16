@@ -5,49 +5,57 @@
         <div class="col-12">
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.students.name")}}</label>
-              <input onfocus="this.select();" class="form-control" v-model="model.name" :placeholder="$locales.t('forms.students.name.ph')" />
+              <label class="control-label">{{$locales.t("student.name")}}</label>
+              <input onfocus="this.select();" class="form-control" v-model="model.name" :placeholder="$locales.t('student.name.ph')" />
               <span data-validation-prop="name" 
-                data-validation-rule="v => v != '' || 'forms.students.name.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'student.name.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.students.gender")}}</label>
+              <label class="control-label">{{$locales.t("student.phonenumber")}}</label>
+              <input onfocus="this.select();" class="form-control" v-model="model.phoneNumber" :placeholder="$locales.t('student.phonenumber.ph')" />
+              <span data-validation-prop="phoneNumber" 
+                data-validation-rule="v => v != '' || 'student.phonenumber.invalid'" class="invalid-feedback" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col">
+              <label class="control-label">{{$locales.t("student.gender")}}</label>
               <v-select :dir="$locales.direction()" :clearable="false" :options="genders" :reduce="gender => gender.id" label="name" 
-                v-model="model.gender" :placeholder="$locales.t('forms.students.gender.ph')" required>
+                v-model="model.gender" :placeholder="$locales.t('student.gender.ph')" required>
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="gender" 
-                data-validation-rule="v => v != '' || 'forms.students.gender.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'student.gender.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.students.year")}}</label>
+              <label class="control-label">{{$locales.t("student.year")}}</label>
               <v-select :dir="$locales.direction()" :clearable="false" :options="years" :reduce="year => year.id" label="name" 
-                v-model="model.year" :placeholder="$locales.t('forms.students.year.ph')" required>
+                v-model="model.year" :placeholder="$locales.t('student.year.ph')" required>
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="year" 
-                data-validation-rule="v => v != '' || 'forms.students.year.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'student.year.invalid'" class="invalid-feedback" />
             </div>
           </div>
           <div v-if="isEdit" class="form-row">
             <div class="form-group col">
-              <label class="control-label">{{$locales.t("forms.students.status")}}</label>
+              <label class="control-label">{{$locales.t("student.status")}}</label>
               <v-select :dir="$locales.direction()" :clearable="false" :options="status" :reduce="status => status.id" label="name" 
-                v-model="model.status" :placeholder="$locales.t('forms.students.status.ph')" required>
+                v-model="model.status" :placeholder="$locales.t('student.status.ph')" required>
                 <template #no-options>
-                  {{$locales.t("app.emptystate.default")}}
+                  {{$locales.t("emptystate.default")}}
                 </template>
               </v-select>
               <span data-validation-prop="status" 
-                data-validation-rule="v => v != '' || 'forms.students.status.invalid'" class="invalid-feedback" />
+                data-validation-rule="v => v != '' || 'student.status.invalid'" class="invalid-feedback" />
             </div>
           </div>
         </div>
@@ -69,7 +77,8 @@ export default {
   name: 'SaveStudentModal',
   data: () => ({
     model: {
-      id: '', name: '', gender: 0, year: 0, status: 0
+      id: '', name: '', gender: 0, year: 0, 
+      status: 0, phoneNumber: '', degree: 0, totalDegree: 0
     },
     isEdit: false,
     id: 0,
@@ -77,7 +86,7 @@ export default {
   }),
   computed: {
     title() {
-      let option = !this.isEdit ? "app.options.add" : "app.options.edit";
+      let option = !this.isEdit ? "options.add" : "options.edit";
       return this.$locales.t(option);
     },
     genders() {
@@ -91,9 +100,10 @@ export default {
     }
   },
   created() {
-    this.$bus.$on("init-save-student-modal", (student=null, id=0) => {
+    this.$bus.$on("init-save-student-modal", (student=null, id=0) =>   {
       this.model = Object.assign({}, {
-        name: '', gender: 0, year: 0, status: 0
+        id: '', name: '', gender: 0, year: 0, 
+        status: 0, phoneNumber: '', degree: 0, totalDegree: 0
       });
       if (student != null) {
         Object.assign(this.model, student);

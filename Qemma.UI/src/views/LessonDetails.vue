@@ -1,6 +1,6 @@
 <template>
   <div class="students">
-    <h1 class="mt-2 mb-5">{{$locales.t('views.studentlessons.title')}}</h1>
+    <h1 class="mt-2 mb-5">{{$locales.t('lesson.details.title')}}</h1>
 
     <!-- lesson details -->
     <div class="card mb-2" >
@@ -11,16 +11,16 @@
         <div class="col-md-10">
           <div class="row card-body">
             <div class="col-4">
-              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.lessons.cols.name')">
+              <h5 class="card-title" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('lesson.name')">
                 {{lesson.name}}
               </h5>
-              <h6 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('tbls.lessons.cols.start')">
-                {{$moment(lesson.start).local().locale($locales.current).format('MMMM Do dddd YYYY, h:mm:ss a')}}
+              <h6 class="card-text" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('lesson.start')">
+                {{$moment(lesson.start).local().locale($locales.getCurrentLocaleCode()).format('MMMM Do dddd YYYY, h:mm:ss a')}}
               </h6>
             </div>
             <div class="col-6">
               <a href="Javascript:void(0);" @click="saveLesson">
-                <font-awesome-icon icon="fas fa-pen" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('app.options.edit')"/>
+                <font-awesome-icon icon="fas fa-pen" data-toggle="tooltip" data-placement="bottom" :title="$locales.t('options.edit')"/>
               </a>
             </div>
           </div>
@@ -30,9 +30,9 @@
     <hr />
     
     <h5 class="mt-2 mb-4">
-      {{$locales.t('views.students.title')}}
+      {{$locales.t('students.title')}}
       <button @click="save(null, 0)" class="btn btn-primary btn-sm text-white m-2">
-        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('app.options.add')}}
+        <font-awesome-icon icon="fas fa-circle-plus"/> {{$locales.t('options.add')}}
       </button>
     </h5>
     <app-filter :init-filter="initFilter" :filter-props="filterProps" @apply="applyFilter" />
@@ -99,7 +99,7 @@ export default {
           queryFilter: filter
         }
       }).then(pageData => {
-        this.studentLessons = pageData.data;
+        this.studentLessons = pageData.data ?? [];
         this.count = pageData.count;
       });
     },
