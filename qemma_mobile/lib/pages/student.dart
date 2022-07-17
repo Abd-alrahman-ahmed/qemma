@@ -23,6 +23,7 @@ class StudentPage extends StatefulWidget {
 class StudentPageState extends State<StudentPage> {
   final StudentPresenter _studentPresenter = StudentPresenter();
   bool update = false;
+  bool _isExpanded = false;
   DateTime from =
       DateTime.now().toStartOfDay().subtract(const Duration(days: 30)).toUtc();
   DateTime to = DateTime.now().toEndOfDay().toUtc();
@@ -110,57 +111,78 @@ class StudentPageState extends State<StudentPage> {
                 child: StudentCard(student: StudentPresenter.student),
               ),
               const Divider(),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: BootstrapRow(
-                  children: [
-                    BootstrapCol(
-                      child: Text(
-                        "${Locales.t('filter.from')}: ",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              ExpansionPanelList(
+                elevation: 0,
+                expansionCallback: (panelIndex, isExpanded) {
+                  _isExpanded = !_isExpanded;
+                  setState(() {});
+                },
+                children: [
+                  ExpansionPanel(
+                    isExpanded: _isExpanded,
+                    canTapOnHeader: true,
+                    headerBuilder: (context, isExpanded) {
+                      return ListTile(
+                        title: Text(
+                          Locales.t('filter.title'),
+                          style: const TextStyle(color: Colors.black),
                         ),
+                      );
+                    },
+                    body: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: BootstrapRow(
+                        children: [
+                          BootstrapCol(
+                            child: Text(
+                              "${Locales.t('filter.from')}: ",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BootstrapCol(
+                            child: TextButton(
+                              onPressed: () {
+                                selectFromDate(context, from);
+                              },
+                              child: Text(Jiffy(from.toLocal()).yMMMMd),
+                            ),
+                          ),
+                          BootstrapCol(
+                            child: Text(
+                              "${Locales.t('filter.to')}: ",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BootstrapCol(
+                            child: TextButton(
+                              onPressed: () {
+                                selectToDate(context, to);
+                              },
+                              child: Text(Jiffy(to.toLocal()).yMMMMd),
+                            ),
+                          ),
+                          BootstrapCol(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(80, 40),
+                              ),
+                              onPressed: () {
+                                load();
+                              },
+                              child: Text(Locales.t('filter.apply')),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    BootstrapCol(
-                      child: TextButton(
-                        onPressed: () {
-                          selectFromDate(context, from);
-                        },
-                        child: Text(Jiffy(from.toLocal()).yMMMMd),
-                      ),
-                    ),
-                    BootstrapCol(
-                      child: Text(
-                        "${Locales.t('filter.to')}: ",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    BootstrapCol(
-                      child: TextButton(
-                        onPressed: () {
-                          selectToDate(context, to);
-                        },
-                        child: Text(Jiffy(to.toLocal()).yMMMMd),
-                      ),
-                    ),
-                    BootstrapCol(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(80, 40),
-                        ),
-                        onPressed: () {
-                          load();
-                        },
-                        child: Text(Locales.t('filter.apply')),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               LessonsTable(
                 lessons: _studentPresenter.studentLessons,

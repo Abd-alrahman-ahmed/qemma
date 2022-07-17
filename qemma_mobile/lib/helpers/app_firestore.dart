@@ -4,7 +4,6 @@ import 'dart:io';
 
 class FireStore {
   static Future<bool> checkNetwork() async {
-    return true;
     try {
       final result = await InternetAddress.lookup('www.google.com');
       if (result.isEmpty || result.first.rawAddress.isEmpty) {
